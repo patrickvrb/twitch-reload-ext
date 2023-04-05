@@ -1,0 +1,19 @@
+{
+  "name": "Twitch player auto-reload",
+  "version": "1.0.0",
+  "description": "This is an extension that observers and auto-reloads commom Twitch video playback errors.",
+  "author": "Patrick Beal",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Twitch auto-reload"
+  },
+  "content_scripts": [
+    {
+      "js": ["script.js"],
+      "matches": [
+        "https://www.twitch.tv/*"
+      ]
+    }
+  ]
+}
