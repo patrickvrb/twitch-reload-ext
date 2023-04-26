@@ -1,15 +1,27 @@
+const ERROR_BUTTON_CLASS_SELECTOR = "ScCoreButtonDestructive";
+const VIDEO_PLAYER_CLASS_SELECTOR = ".video-player__overlay";
+
 function findReloadButtonAndClickIt() {
-  if (document.querySelector('.content-overlay-gate__content')) {
-    console.log('Error detected! Reloading player...');
-    document.querySelector('.content-overlay-gate__content').querySelector('button').click();
+  const reloadButton = document.querySelector(
+    `button[class*="${ERROR_BUTTON_CLASS_SELECTOR}"]`
+  );
+  if (!!reloadButton) {
+    console.log("Error detected! Reloading player...");
+    reloadButton.click();
   }
 }
 
 function detectPlaybackError() {
-  console.log('Twitch video player error detection initialized.');
-  const videoPlayer = document.querySelector('.video-player__default-player');
-  const observer = new MutationObserver(findReloadButtonAndClickIt);
-  observer.observe(videoPlayer, { childList: true, subtree: true });
+  console.log("Local Trial 2.0.0");
+  const videoPlayer = document.querySelector(VIDEO_PLAYER_CLASS_SELECTOR);
+  if (!!videoPlayer) {
+    console.log("Twitch player found. \nError detection initialized.");
+    const observer = new MutationObserver(findReloadButtonAndClickIt);
+    observer.observe(videoPlayer, { childList: true, subtree: true });
+  } else {
+    console.log("Player not found. \nRetrying...");
+    setTimeout(detectPlaybackError, 500);
+  }
 }
 
 detectPlaybackError();
