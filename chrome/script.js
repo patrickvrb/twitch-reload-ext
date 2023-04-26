@@ -12,7 +12,6 @@ function findReloadButtonAndClickIt() {
 }
 
 function detectPlaybackError() {
-  console.log("Local Trial 2.0.0");
   const videoPlayer = document.querySelector(VIDEO_PLAYER_CLASS_SELECTOR);
   if (!!videoPlayer) {
     console.log("Twitch player found. \nError detection initialized.");
