@@ -1,4 +1,4 @@
-# twitch-reload-ext
+# Twitch player auto-reload
 Chrome & Firefox extension for reloading Twitch video playback when error occurs
 
 Chrome: https://chrome.google.com/webstore/detail/twitch-player-auto-reload/npnmdcgbeogghcoainjjnllinmcljmdf
