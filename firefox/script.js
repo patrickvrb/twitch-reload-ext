@@ -1,26 +1,28 @@
-const ERROR_BUTTON_CLASS_SELECTOR = "ScCoreButtonDestructive";
-const VIDEO_PLAYER_CLASS_SELECTOR = ".video-player__overlay";
+const ERROR_BUTTON_CLASS_SELECTOR = 'ScCoreButtonDestructive';
+const TRANSITION_STATE_CLASS_SELECTOR = ".player-overlay-background";
+const MAX_RELOAD_TRIES = 5;
+let pollsMade = 0;
 
-function findReloadButtonAndClickIt() {
-  const reloadButton = document.querySelector(
-    `button[class*="${ERROR_BUTTON_CLASS_SELECTOR}"]`
-  );
-  if (!!reloadButton) {
-    console.log("Error detected! Reloading player...");
-    reloadButton.click();
-  }
+const pollForReloadButton = () => {
+  setTimeout(() => {
+    const errorButton = document.querySelector(`button[class*="${ERROR_BUTTON_CLASS_SELECTOR}"]`);
+    const isTransitionState = !!document.querySelector(TRANSITION_STATE_CLASS_SELECTOR)
+
+    if (errorButton) {
+      if(pollsMade >= MAX_RELOAD_TRIES) {
+        console.error('Max tries reloading player reached.')
+        return;
+      }
+      pollsMade++;
+      console.log('Error detected. Reloading player...')
+      errorButton.click();
+    } else if(!errorButton && !isTransitionState) { // Player running with no errors
+      pollsMade = 0;
+    }
+
+    pollForReloadButton();
+  }, 1000);
 }
 
-function detectPlaybackError() {
-  const videoPlayer = document.querySelector(VIDEO_PLAYER_CLASS_SELECTOR);
-  if (!!videoPlayer) {
-    console.log("Twitch player found. \nError detection initialized.");
-    const observer = new MutationObserver(findReloadButtonAndClickIt);
-    observer.observe(videoPlayer, { childList: true, subtree: true });
-  } else {
-    console.log("Player not found. \nRetrying...");
-    setTimeout(detectPlaybackError, 500);
-  }
-}
-
-detectPlaybackError();
+console.log('Twitch player auto-reload initialized.')
+pollForReloadButton();
