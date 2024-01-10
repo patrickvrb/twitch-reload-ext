@@ -1,6 +1,7 @@
 const ERROR_BUTTON_CLASS_SELECTOR = 'ScCoreButtonDestructive';
 const TRANSITION_STATE_CLASS_SELECTOR = ".player-overlay-background";
 const MAX_RELOAD_TRIES = 5;
+const POLL_FREQUENCY = 1000;
 let pollsMade = 0;
 
 const pollForReloadButton = () => {
@@ -9,8 +10,11 @@ const pollForReloadButton = () => {
     const isTransitionState = !!document.querySelector(TRANSITION_STATE_CLASS_SELECTOR)
 
     if (errorButton) {
+      if(!errorButton.querySelector(`div[class*="ScFigure"]`)){
+        return;
+      }
       if(pollsMade >= MAX_RELOAD_TRIES) {
-        console.error('Max tries reloading player reached.')
+        console.log('Max tries reloading player reached.')
         return;
       }
       pollsMade++;
@@ -21,7 +25,7 @@ const pollForReloadButton = () => {
     }
 
     pollForReloadButton();
-  }, 1000);
+  }, POLL_FREQUENCY);
 }
 
 console.log('Twitch player auto-reload initialized.')
